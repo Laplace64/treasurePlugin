@@ -1,0 +1,4 @@
+name: treasure
+version: '1.0-SNAPSHOT'
+main: net.laplace.treasure.Treasure
+api-version: '1.21'

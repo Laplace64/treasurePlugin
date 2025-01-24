@@ -1,11 +1,13 @@
 package net.laplace.treasure.utils
 
+import net.laplace.treasure.generation.GenerationConfig
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
 fun spawnableLocation(
     player: Player,
+    cfg: GenerationConfig,
 ): Location? {
     val world = player.world
 
@@ -13,9 +15,14 @@ fun spawnableLocation(
     val y = player.location.blockY
     val z = player.location.blockZ
 
-    for (i in -32..32) {
-        for (j in -32..32) {
-            for (k in 3 downTo -2) {
+    val xRange = cfg.x
+    val yRange = cfg.y
+    val zRange = cfg.z
+
+    for (i in -xRange..xRange) {
+        for (j in -yRange..yRange) {
+            for (k in zRange downTo -zRange) {
+
                 val block = world.getBlockAt(x + i, y + j, z + k)
                 if (block.type == Material.SAND) {
                     val above = world.getBlockAt(x + i, y + j + 1, z + k)

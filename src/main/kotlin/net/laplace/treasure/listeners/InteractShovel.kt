@@ -1,8 +1,8 @@
 package net.laplace.treasure.listeners
 
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.laplace.treasure.ChatLogger
+import net.laplace.treasure.Treasure
 import net.laplace.treasure.storage.InMemoryStorage
 import net.laplace.treasure.tasks.Result
 import net.laplace.treasure.tasks.TreasureResult
@@ -13,12 +13,11 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
-import org.bukkit.plugin.Plugin
 import java.util.logging.Logger
 
 class InteractShovel(
     private val logger: Logger,
-    private val plugin: Plugin,
+    private val plugin: Treasure,
 ) : Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
@@ -26,7 +25,7 @@ class InteractShovel(
             event.action != Action.RIGHT_CLICK_BLOCK ||
             event.hand == EquipmentSlot.OFF_HAND
         ) {
-            return;
+            return
         }
 
         // check if it corresponds to a treasure location

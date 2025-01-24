@@ -1,8 +1,7 @@
-range:
-  x: 32
-  y: 32
-  z: 4
+x: 32
+y: 32
+z: 4
 
-  xOffset: 0
-  yOffset: 0
-  zOffset: 0
+xOffset: 0
+yOffset: 0
+zOffset: 0

@@ -2,6 +2,7 @@ package net.laplace.treasure.listeners
 
 import net.kyori.adventure.text.format.NamedTextColor
 import net.laplace.treasure.ChatLogger
+import net.laplace.treasure.Treasure
 import net.laplace.treasure.storage.InMemoryStorage
 import net.laplace.treasure.tasks.Tune
 import net.laplace.treasure.utils.spawnableLocation
@@ -9,12 +10,11 @@ import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.plugin.Plugin
 import java.util.logging.Logger
 
 class InteractMetalDetector(
     private val logger: Logger,
-    private val plugin: Plugin,
+    private val plugin: Treasure,
 ) : Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
@@ -43,7 +43,9 @@ class InteractMetalDetector(
             uuids.add(uuid)
         }
 
-        val location = spawnableLocation(player) ?: run {
+        val config = plugin.manager.generationConfig
+
+        val location = spawnableLocation(player, config) ?: run {
             ChatLogger.message(
                 player, "There doesn't seem to be anything nearby..",
                 NamedTextColor.RED

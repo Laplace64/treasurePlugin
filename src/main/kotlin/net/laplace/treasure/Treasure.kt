@@ -4,16 +4,17 @@ package net.laplace.treasure
 import net.laplace.treasure.config.ConfigManager
 import net.laplace.treasure.listeners.InteractMetalDetector
 import net.laplace.treasure.listeners.InteractShovel
-import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.time.measureTime
 
 class Treasure : JavaPlugin() {
+    val manager by lazy { ConfigManager.getInstance(this) }
 
     override fun onEnable() {
         logger.info("Treasure plugin started, loading configuration")
 
-        ConfigManager.getInstance(this)
+        val lootConfig = manager.lootConfig
+        val generationConfig = manager.generationConfig
 
         logger.info("Registering events")
         val t = measureTime {
@@ -23,13 +24,8 @@ class Treasure : JavaPlugin() {
 
         logger.info("Events registered in $t")
 
-        logger.info("Loading loot config: ${ConfigManager.getInstance().lootConfig}")
-
-        logger.info(
-            "${
-                Material.getMaterial("IRON_INGOT")
-            }"
-        )
+        logger.info("Loaded loot config: $lootConfig")
+        logger.info("Loaded generation config: $generationConfig")
     }
 
     override fun onDisable() {

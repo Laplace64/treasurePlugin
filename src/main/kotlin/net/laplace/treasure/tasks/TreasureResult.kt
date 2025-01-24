@@ -2,6 +2,7 @@ package net.laplace.treasure.tasks
 
 import net.kyori.adventure.text.format.NamedTextColor
 import net.laplace.treasure.ChatLogger
+import net.laplace.treasure.config.ConfigManager
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -14,30 +15,48 @@ enum class Result {
 
 class TreasureResult(
     private val player: Player,
-    private val result: Result
-): BukkitRunnable() {
+    private val result: Result,
+) : BukkitRunnable() {
     override fun run() {
         when (result) {
             Result.FAILED -> {
-                ChatLogger.message(player,
+                ChatLogger.message(
+                    player,
                     "You dug up a pile of.. nothing.",
-                    NamedTextColor.RED)
+                    NamedTextColor.RED
+                )
             }
 
             Result.SUCCESS -> {
-                ChatLogger.message(player,
+                ChatLogger.message(
+                    player,
                     "Something glimmers within the excavated area. You found a treasure!",
-                    NamedTextColor.GREEN)
+                    NamedTextColor.GREEN
+                )
 
                 if (player.inventory.itemInOffHand.type != Material.AIR) {
-                    ChatLogger.message(player,
+                    ChatLogger.message(
+                        player,
                         "You found a treasure, but your offhand is full. Please make space.",
-                        NamedTextColor.RED)
+                        NamedTextColor.RED
+                    )
                     return
                 } else {
-                    player.inventory.setItemInOffHand(
-                        ItemStack(Material.DIAMOND)
-                    )
+                    val loot = ConfigManager.getInstance().lootConfig
+
+                    val item = loot.getRandomItem()
+                    
+                    Material.getMaterial(item.name)?.let {
+                        player.inventory.setItemInOffHand(
+                            ItemStack(it)
+                        )
+                    } ?: run {
+                        ChatLogger.message(
+                            player,
+                            "The treasure item is invalid. Please contact the server administrator.",
+                            NamedTextColor.RED
+                        )
+                    }
                 }
             }
         }

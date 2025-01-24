@@ -1,5 +1,9 @@
 loots:
-  - name: "diamond"
-    weight: 1
-  - name: "gold"
+  - name: "IRON_INGOT"
+    weight: 3
+  - name: "GOLD_INGOT"
     weight: 2
+  - name: "DIAMOND"
+    weight: 1
+
+debug: true

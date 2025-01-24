@@ -2,23 +2,24 @@ package net.laplace.treasure.tasks
 
 import net.kyori.adventure.text.format.NamedTextColor
 import net.laplace.treasure.ChatLogger
+import net.laplace.treasure.config.ConfigManager
 import net.laplace.treasure.storage.InMemoryStorage
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.Particle
-import org.bukkit.Sound
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import java.util.UUID
+import java.util.*
+import java.util.logging.Logger
 import kotlin.math.abs
 
 class Tune(
     private val playerUUID: UUID,
     private val location: Location,
+    private val logger: Logger,
 ) : BukkitRunnable() {
 
     private var lastRang = 0
+    private var active = false
+
     override fun run() {
         val server = Bukkit.getServer()
         val player = server.getEntity(playerUUID)
@@ -54,12 +55,27 @@ class Tune(
                 else -> distance
             }
 
-            player.spawnParticle(Particle.END_ROD, location, 3, 0.0, 0.0, 0.0, 0.0)
+
 
             if (server.currentTick - lastRang > threshold) {
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_BELL, 1.5f, 1.0f)
                 lastRang = server.currentTick
             }
+
+            val cfg = ConfigManager.getInstance().lootConfig
+
+            if (cfg.debug) {
+                player.spawnParticle(Particle.END_ROD, location.clone().apply {
+                    y += 2
+                }, 3, 0.0, 0.0, 0.0, 0.0)
+                ChatLogger.message(
+                    player, "Distance: $distance. Particle coords: ${
+                        location.clone().apply {
+                            y += 2
+                        }
+                    }", NamedTextColor.WHITE)
+            }
+
 
             if (distance < 2.3) {
                 ChatLogger.message(
@@ -68,9 +84,9 @@ class Tune(
                 )
 
                 // treasure will decay after a while
-                InMemoryStorage.treasureSpots[player.location.apply {
-                    y -= 1
-                }] = System.currentTimeMillis() + 20000
+                InMemoryStorage.treasureSpots[player.location] = System.currentTimeMillis() + 20000
+            } else {
+                active = true
             }
         } finally {
             cleanup()
@@ -79,6 +95,12 @@ class Tune(
     }
 
     private fun cleanup() {
+        if (active) {
+            active = false
+            return
+        }
+
+
         InMemoryStorage.uuids.remove(playerUUID)
         cancel()
     }

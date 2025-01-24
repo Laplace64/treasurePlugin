@@ -1,0 +1,5 @@
+loots:
+  - name: "diamond"
+    weight: 1
+  - name: "gold"
+    weight: 2

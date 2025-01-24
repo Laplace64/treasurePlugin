@@ -16,13 +16,16 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.plugin.Plugin
 import java.util.logging.Logger
 
-class InteractShovel(private val logger: Logger,
-                     private val plugin: Plugin): Listener {
+class InteractShovel(
+    private val logger: Logger,
+    private val plugin: Plugin,
+) : Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
         if (event.item?.type != Material.IRON_SHOVEL ||
             event.action != Action.RIGHT_CLICK_BLOCK ||
-            event.hand == EquipmentSlot.OFF_HAND) {
+            event.hand == EquipmentSlot.OFF_HAND
+        ) {
             return;
         }
 
@@ -31,7 +34,11 @@ class InteractShovel(private val logger: Logger,
         val spots = InMemoryStorage.treasureSpots
 
         if (block == null) {
-            ChatLogger.message(event.player, "Not a valid treasure spot to dig (how did you do that?)", NamedTextColor.RED)
+            ChatLogger.message(
+                event.player,
+                "Not a valid treasure spot to dig (how did you do that?)",
+                NamedTextColor.RED
+            )
             return
         }
 

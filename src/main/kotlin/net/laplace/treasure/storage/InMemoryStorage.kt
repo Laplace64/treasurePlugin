@@ -1,7 +1,7 @@
-package net.laplace.treasure.storage;
+package net.laplace.treasure.storage
 
 import org.bukkit.Location
-import java.util.UUID
+import java.util.*
 
 object InMemoryStorage {
     val uuids = mutableSetOf<UUID>()

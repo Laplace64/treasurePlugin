@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.20-Beta1"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.0-beta6"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
@@ -19,7 +19,10 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    implementation("org.spongepowered:configurate-yaml:4.1.2")
+    implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation(kotlin("reflect", "2.0.20"))
 }
 
 val targetJavaVersion = 21
@@ -30,6 +33,7 @@ kotlin {
 tasks.build {
     dependsOn("shadowJar")
 }
+
 
 tasks.processResources {
     val props = mapOf("version" to version)

@@ -23,6 +23,7 @@ class TreasureResult(
                     "You dug up a pile of.. nothing.",
                     NamedTextColor.RED)
             }
+
             Result.SUCCESS -> {
                 ChatLogger.message(player,
                     "Something glimmers within the excavated area. You found a treasure!",

@@ -12,8 +12,10 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.plugin.Plugin
 import java.util.logging.Logger
 
-class InteractMetalDetector(private val logger: Logger,
-                            private val plugin: Plugin): Listener {
+class InteractMetalDetector(
+    private val logger: Logger,
+    private val plugin: Plugin
+) : Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
         if (event.item?.type != Material.IRON_HORSE_ARMOR) {
